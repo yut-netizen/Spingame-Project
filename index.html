@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin Machine Project - About</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="page-about">
+
+    <header>
+        <h1 class="logo">Spin Machine</h1>
+        <nav>
+            <a href="index.html" id="nav-about">about project</a>
+            <a href="code.html" id="nav-code">code</a>
+            <a href="video.html" id="nav-video">video</a>
+        </nav>
+    </header>
+
+    <main>
+        
+        <section class="scores-container">
+            <div class="score-box">
+                <div class="title">HIGH SCORE</div>
+                <div class="value-container">
+                    <span id="val-high" class="value">--</span>
+                </div>
+            </div>
+            <div class="score-box">
+                <div class="title">LAST SCORE</div>
+                <div class="value-container">
+                    <span id="val-last" class="value">--</span>
+                </div>
+            </div>
+            <div class="score-box">
+                <div class="title">LAST PRIZES</div>
+                <div class="value-container">
+                    <span id="val-prizes" class="value">--</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>บทคัดย่อ</h2>
+            <p>Spin Machine เป็นโปรเจคมินิเกมเพื่อความผ่อนคลายและความเพลิดเพลินในเวลาว่าง
+              โดยใช้ Arduino Uno R4 WiFi ในการจำลองการทำงานของเกมที่
+              แสดงผ่านหน้าจอ LCD 16×2</p>
+            <p>การทำงานของเกม : ระบบใช้ปุ่มกดเพื่อเริ่มเกม จากนั้นโปรแกรมจะทำการประมวลผลอัลกอริทึมการสุ่มสัญลักษณ์และตรวจสอบเงื่อนไขการชนะตามที่กำหนดไว้</p>
+        </section>
+
+        <section class="content-section">
+            <h2>Hardware</h2>
+            <div class="card-grid grid-3">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="arduino.jpg" alt="Arduino UNO R4 WiFi">
+                    </div>
+                    <div class="card-content">
+                        <h4>Arduino UNO R4 WiFi</h4>
+                        <p>The project's 'brain,' this microcontroller runs the game logic and uses built-in Wi-Fi to send scores online.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image">
+                        <img src="buzzer.jpg" alt="Buzzer">
+                    </div>
+                    <div class="card-content">
+                        <h4>Buzzer</h4>
+                        <p>Provides audio feedback for the game, playing melodies for wins or simple tones for button presses.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image">
+                        <img src="lcd.jpg" alt="LCD 16x2">
+                    </div>
+                    <div class="card-content">
+                        <h4>LCD 16x2</h4>
+                        <p>16-character, 2-line display used to show player credits, spin results, and winning messages.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>member</h2>
+            <div class="card-grid grid-4">
+                <div class="card">
+                    <div class="card-image"><img src="yut.jpg" alt="LCD 16x2"></div>
+                    <div class="card-content">
+                        <h4>Chanyut Benjapakorn</h4>
+                        <h4>67070037</h4>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image"><img src="sunny.jpg" alt="LCD 16x2"></div>
+                    <div class="card-content">
+                        <h4>Sun Chokanan</h4>
+                        <h4>67070038</h4>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image"><img src="pat.jpg" alt="LCD 16x2"></div>
+                    <div class="card-content">
+                        <h4>Tanakit Sridaorueng</h4>
+                        <h4>67070059</h4>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image"><img src="sun.png" alt="LCD 16x2"></div>
+                    <div class="card-content">
+                        <h4>Nitiroj Suppatanawat</h4>
+                        <h4>67070091</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <h5>Spin Machine</h5>
+    </footer>
+
+    <script>
+        const blynkToken = "TjnW6mp9TuATcBE3nb4p5c5H7MlyPKhx";
+        const apiUrl = "https://blynk.cloud/external/api/get?token=" + blynkToken;
+
+        const elLastScore = document.getElementById('val-last');
+        const elHighScore = document.getElementById('val-high');
+        const elPrizes = document.getElementById('val-prizes');
+
+        async function fetchBlynkValues() {
+            try {
+                const [resV0, resV1, resV2] = await Promise.all([
+                    fetch(`${apiUrl}&V0`),
+                    fetch(`${apiUrl}&V1`),
+                    fetch(`${apiUrl}&V2`) 
+                ]);
+
+                const v0 = await resV0.text();
+                const v1 = await resV1.text();
+                const v2 = await resV2.text();
+
+                // ตรวจสอบว่า element ยังอยู่ ก่อนที่จะอัปเดต
+                if (elLastScore) elLastScore.textContent = (v0 && !isNaN(v0)) ? v0 : "--";
+                if (elHighScore) elHighScore.textContent = (v1 && !isNaN(v1)) ? v1 : "--";
+                if (elPrizes) elPrizes.textContent = (v2 && !isNaN(v2)) ? v2 : "--";
+
+            } catch (error) {
+                console.error("Failed to fetch Blynk data:", error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchBlynkValues();
+            setInterval(fetchBlynkValues, 1500);
+        });
+    </script>
+
+</body>
+</html>
